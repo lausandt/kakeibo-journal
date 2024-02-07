@@ -1,0 +1,14 @@
+services:
+
+  backend:
+    build: ./services/backend
+    ports:
+      - 5000:5000
+    environment:
+      - DATABASE_URL=postgres://postgres:changethis@db:5432/journal_db
+      - SECRET_KEY=e3c54bbdf281007a7fcc323f957a09b766be7bf41b265819f65ebed4405004f3
+    volumes:
+      - ./services/backend:/app
+    command: uvicorn src.main:app --reload --host 0.0.0.0 --port 5000
+    # depends_on:
+    #   - db

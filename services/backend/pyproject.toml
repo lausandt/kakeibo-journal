@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "kakeibo-journal"
+version = "0.1.0"
+description = ""
+authors = ["Laurens Sandt <laurens.sandt@protonmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+uvicorn = "*"
+fastapi = "*"
+
+
+[tool.poetry.group.dev.dependencies]
+httpx = "*"
+pytest = "*"
+ruff = "*"
+mypy = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
