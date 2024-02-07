@@ -18,10 +18,10 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8080"],  # vue front end
+    allow_origins=['http://localhost:8080'],  # vue front end
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=['*'],
+    allow_headers=['*'],
 )
 # app.include_router(users.router)
 # app.include_router(entries.router)
@@ -30,8 +30,6 @@ app.add_middleware(
 # register_tortoise(app=app, config=TORTOISE_ORM, generate_schemas=False)
 
 
-@app.get("/")
+@app.get('/')
 def root() -> dict[str, str]:
-    return {"George": "George is an async rhino, very lazy indeed!"}
-
-
+    return {'George': 'George is an async rhino, very lazy indeed!'}
