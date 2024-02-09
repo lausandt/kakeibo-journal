@@ -15,7 +15,7 @@ RUN curl -sSL https://install.python-poetry.org | python -
 
 WORKDIR /app
 COPY pyproject.toml poetry.lock ./
-# COPY migrations .
+COPY migrations .
 RUN . /venv/bin/activate; \
     $POETRY_HOME/bin/poetry install 
 

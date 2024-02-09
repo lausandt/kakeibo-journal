@@ -5,11 +5,12 @@ Class containing the models which will be used by Tortoise and Aerich to create 
 The use of the Meta classes allows us to name that tables seperately from the model class names, 
 allowing those to change while keeping the schemas intact.
 
-The superuser subclass allows certain foreign keys to point only to super users
+The superuser subclass allows certain foreign keys to point only to super users,
+which eleviate the need to block access to regular users.
 """
-from enum import Enum
 from datetime import date
 from decimal import Decimal
+from enum import Enum
 
 from tortoise import fields, models
 

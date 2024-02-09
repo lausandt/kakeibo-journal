@@ -1,6 +1,6 @@
 This a kakeibo journal. An app to help you manage your household finances in a mindful manner and help you achieve short term savings goals. 
 
-Insight: the journal provides you with insight on your families daily spending, not only on the who spend how much where, but also by classifying the expenses not only in the quantitative, standard fixed and variable expenses, but also in qualitive classification.
+Insight: the journal provides you with insight on your families daily spending, not only on the who spend how much where, but also by classifying the expenses not only in the quantitative, standard fixed and variable expenses, but also in qualitive classification:
 
  - Needs: For instance your food shopping, or the utilities. 
  - Wants: For instance a bottle of wine, or a book.   
@@ -16,6 +16,13 @@ Every period (month or four weeks) a rapport gets generated showing you who spen
 Everyone that makes household expenses can be a user, should be a user, of the journal to get an accurate overview of the household expenses. 
 
 A user account is made up of an email address and a password. Users are differentiated in super users that have all the administrative rights, and users that have limited access to the journal. For instance a superuser can create both fixed entries and variable entries in the journal, a regular user only can add variable entries. A superuser can set a user inactive if need be and can elevate regular users to superusers. 
+
+TECHNICAL
+===
+The backend is a Fastapi app written in Python
+The front end a Vue app written in JavaScript/Vue
+
+The database is Postgres DB 
 
 
 
