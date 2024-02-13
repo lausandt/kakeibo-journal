@@ -9,17 +9,33 @@ which creates the pydantic models for you:
 from pydantic import BaseModel
 from tortoise.contrib.pydantic import pydantic_model_creator
 
-from src.core.models import SuperUser, UserModel
+from src.core.models import User
 
-UserInSchema = pydantic_model_creator(UserModel, name='UserIn', exclude_readonly=True)
-
-UserOutSchema = pydantic_model_creator(
-    UserModel,
-    name='UserOut',
-    exclude=['password', 'active'],
+UserInSchema = pydantic_model_creator(
+    User,
+    name='UserIn',
+    exclude_readonly=True,
+    model_config={
+        'json_schema_extra': {
+            'examples': [
+                {
+                    'username': 'agent@provocateur.com',
+                    'full_name': 'Agent Provocateur',
+                    'password': 'string',
+                   }
+            ]
+        }
+    },
 )
 
-UserDatabaseSchema = pydantic_model_creator(UserModel, name='User')
+
+UserOutSchema = pydantic_model_creator(
+    User,
+    name='UserOut',
+    exclude=['password', 'active', 'fixeds', 'savings_goal', 'superuser'],
+)
+
+UserDatabaseSchema = pydantic_model_creator(User, name='User')
 
 
 class UpdateUser(BaseModel):
@@ -38,14 +54,3 @@ class UpdateUser(BaseModel):
             ]
         }
     }
-
-
-SuperInSchema = pydantic_model_creator(SuperUser, name='SuperIn', exclude_readonly=True)
-
-SuperOutSchema = pydantic_model_creator(
-    SuperUser,
-    name='SuperOut',
-    exclude=['password', 'active'],
-)
-
-SuperDatabaseSchema = pydantic_model_creator(SuperUser, name='Superuser')

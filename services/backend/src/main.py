@@ -23,6 +23,8 @@ app.add_middleware(
     allow_headers=['*'],
 )
 app.include_router(users.router)
+# app.include_router(admin.router)
+# app.include_router(login.router)
 # app.include_router(entries.router)
 # app.include_router(periods.router)
 

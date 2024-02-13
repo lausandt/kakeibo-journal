@@ -8,7 +8,7 @@ The functions are not commented on as they are typed and relatively simple
 from fastapi import HTTPException
 from tortoise.exceptions import DoesNotExist, IntegrityError
 
-from src.core.models import SuperUser, UserModel
+from src.core.models import User
 from src.core.security import get_password_hash
 
 # from src.schemas.entries import EntryOutSchema, RegularEntryOutSchema
@@ -20,12 +20,15 @@ from src.schemas.users import (
 )
 
 
-async def get_user_me(*, id: int) -> UserOutSchema:
-    return await UserOutSchema.from_queryset_single(UserModel.get(id=id))
+async def get_user(id: int) -> UserOutSchema:  # type: ignore
+    try: 
+        return await UserOutSchema.from_queryset_single(User.get(id=id))
+    except DoesNotExist:
+        raise HTTPException(status_code=404, detail=f'there is no user with id {id}') 
 
 
-async def get_users() -> list[UserOutSchema]:
-    return await UserOutSchema.from_queryset(UserModel.all())
+async def get_users() -> list[UserOutSchema]:  # type: ignore
+    return await UserOutSchema.from_queryset(User.all())
 
 
 # async def get_entries_user(username: str):
@@ -41,11 +44,11 @@ async def get_users() -> list[UserOutSchema]:
 #     return sub1 + sub2
 
 
-async def create_user(user: UserInSchema) -> UserOutSchema:
+async def create_user(user: UserInSchema) -> UserOutSchema:  # type: ignore
     user.password = get_password_hash(user.password)
 
     try:
-        user_obj = await UserModel.create(**user.model_dump(exclude_unset=True))
+        user_obj = await User.create(**user.model_dump(exclude_unset=True))
     except IntegrityError:
         raise HTTPException(
             status_code=401, detail=f'Sorry, username {user.username} already exists.'
@@ -54,24 +57,13 @@ async def create_user(user: UserInSchema) -> UserOutSchema:
     return await UserOutSchema.from_tortoise_orm(user_obj)
 
 
-async def update_user(*, id: int, update: UpdateUser) -> UserOutSchema:
-    update.password = get_password_hash(update.password)
-    await UserModel.filter(id=id).update(**update.model_dump(exclude_unset=True))
-    return await UserOutSchema.from_queryset_single(UserModel.get(id=id))
+async def update_user(*, id: int, update: UpdateUser) -> UserOutSchema:  # type: ignore
+    if update.password:
+        update.password = get_password_hash(update.password)
+    await User.filter(id=id).update(**update.model_dump(exclude_unset=True))
+    return await UserOutSchema.from_queryset_single(User.get(id=id))
 
 
-async def delete_user(user_id: int, current_user: UserModel) -> str:  # add current user
-    try:
-        db_user = await UserDatabaseSchema.from_queryset_single(
-            UserModel.get(id=user_id)
-        )
-    except DoesNotExist:
-        raise HTTPException(status_code=404, detail=f'User {user_id} not found')
-
-    if db_user.id == current_user.id:
-        del_user = await UserModel.filter(id=user_id).delete()
-        if not del_user:
-            raise HTTPException(status_code=404, detail=f'User {user_id} not found')
-        return {'Deleted user': user_id}
-
-    raise HTTPException(status_code=403, detail='Not authorized to delete')
+async def delete_user(id: int) -> dict[str, int]:
+    await User.filter(id=id).delete()
+    return {'Deleted user': id}
